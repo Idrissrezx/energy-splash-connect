@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,11 +14,31 @@ const Login = () => {
     fullName: '',
     phone: ''
   });
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement authentication logic
+    
+    // Check for admin credentials
+    if (formData.email === 'admin@admin.com' && formData.password === 'admin') {
+      toast({
+        title: "Welcome Admin!",
+        description: "Redirecting to dashboard...",
+      });
+      // Redirect to dashboard after a short delay
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
+      return;
+    }
+
+    // TODO: Implement regular user authentication logic
     console.log('Form submitted:', formData);
+    toast({
+      title: "Coming Soon",
+      description: "User authentication will be implemented soon.",
+    });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
