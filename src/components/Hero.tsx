@@ -1,6 +1,6 @@
-
 import { Button } from '@/components/ui/button';
 import { ArrowDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
   return (
@@ -27,12 +27,14 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button 
-              size="lg" 
-              className="bg-energy-accent hover:bg-energy-accent/90 text-white px-8 py-3 text-lg font-semibold transition-all duration-300 transform hover:scale-105"
-            >
-              Join Our Club
-            </Button>
+            <Link to="/login">
+              <Button 
+                size="lg" 
+                className="bg-energy-accent hover:bg-energy-accent/90 text-white px-8 py-3 text-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              >
+                Join Our Club
+              </Button>
+            </Link>
             <Button 
               size="lg" 
               variant="outline" 

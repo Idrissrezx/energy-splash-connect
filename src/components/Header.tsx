@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,9 +42,11 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button className="bg-energy-accent hover:bg-energy-accent/90 text-white">
-              Join Now
-            </Button>
+            <Link to="/login">
+              <Button className="bg-energy-accent hover:bg-energy-accent/90 text-white">
+                Join Now
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -72,9 +75,11 @@ const Header = () => {
                 </a>
               ))}
               <div className="pt-4">
-                <Button className="w-full bg-energy-accent hover:bg-energy-accent/90 text-white">
-                  Join Now
-                </Button>
+                <Link to="/login">
+                  <Button className="w-full bg-energy-accent hover:bg-energy-accent/90 text-white">
+                    Join Now
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
