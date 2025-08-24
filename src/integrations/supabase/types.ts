@@ -14,7 +14,259 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      athletes: {
+        Row: {
+          birthdate: string
+          created_at: string | null
+          full_name: string
+          id: string
+          illness: string | null
+          parent_id: string | null
+        }
+        Insert: {
+          birthdate: string
+          created_at?: string | null
+          full_name: string
+          id?: string
+          illness?: string | null
+          parent_id?: string | null
+        }
+        Update: {
+          birthdate?: string
+          created_at?: string | null
+          full_name?: string
+          id?: string
+          illness?: string | null
+          parent_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "athletes_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media: {
+        Row: {
+          athlete_id: string | null
+          created_at: string | null
+          id: string
+          media_url: string | null
+          type: string | null
+          uploader_id: string | null
+        }
+        Insert: {
+          athlete_id?: string | null
+          created_at?: string | null
+          id?: string
+          media_url?: string | null
+          type?: string | null
+          uploader_id?: string | null
+        }
+        Update: {
+          athlete_id?: string | null
+          created_at?: string | null
+          id?: string
+          media_url?: string | null
+          type?: string | null
+          uploader_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "media_uploader_id_fkey"
+            columns: ["uploader_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          id: string
+          media_url: string | null
+          receiver_id: string | null
+          sender_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          media_url?: string | null
+          receiver_id?: string | null
+          sender_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          media_url?: string | null
+          receiver_id?: string | null
+          sender_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_sender_id_fkey"
+            columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news: {
+        Row: {
+          author_id: string | null
+          content: string | null
+          created_at: string | null
+          id: string
+          media_url: string | null
+          title: string
+          visibility: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          media_url?: string | null
+          title: string
+          visibility?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          media_url?: string | null
+          title?: string
+          visibility?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "news_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pricing: {
+        Row: {
+          conditions: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          price: number | null
+          title: string | null
+        }
+        Insert: {
+          conditions?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          price?: number | null
+          title?: string | null
+        }
+        Update: {
+          conditions?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          price?: number | null
+          title?: string | null
+        }
+        Relationships: []
+      }
+      registrations: {
+        Row: {
+          athlete_id: string | null
+          created_at: string | null
+          documents: Json | null
+          id: string
+          parent_id: string | null
+          plan: string | null
+          status: string | null
+        }
+        Insert: {
+          athlete_id?: string | null
+          created_at?: string | null
+          documents?: Json | null
+          id?: string
+          parent_id?: string | null
+          plan?: string | null
+          status?: string | null
+        }
+        Update: {
+          athlete_id?: string | null
+          created_at?: string | null
+          documents?: Json | null
+          id?: string
+          parent_id?: string | null
+          plan?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registrations_athlete_id_fkey"
+            columns: ["athlete_id"]
+            isOneToOne: false
+            referencedRelation: "athletes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "registrations_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          email: string
+          full_name: string | null
+          id: string
+          role: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          full_name?: string | null
+          id?: string
+          role?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
