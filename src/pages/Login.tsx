@@ -3,10 +3,12 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,37 +16,90 @@ const Login = () => {
     fullName: '',
     phone: ''
   });
+
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form submission with proper Supabase authentication
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Check for admin credentials
-    if (formData.email === 'admin@admin.com' && formData.password === 'admin') {
-      toast({
-        title: "Welcome Admin!",
-        description: "Redirecting to dashboard...",
-      });
-      // Redirect to dashboard after a short delay
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1500);
-      return;
-    }
+    setLoading(true);
 
-    // TODO: Implement regular user authentication logic
-    console.log('Form submitted:', formData);
-    toast({
-      title: "Coming Soon",
-      description: "User authentication will be implemented soon.",
-    });
+    try {
+      if (isLogin) {
+        // Sign in
+        const { error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (error) {
+          toast({
+            title: "Error signing in",
+            description: error.message,
+            variant: "destructive",
+          });
+          return;
+        }
+
+        toast({
+          title: "Welcome back!",
+          description: "You have been signed in successfully.",
+        });
+
+        navigate('/dashboard');
+      } else {
+        // Sign up
+        if (formData.password !== formData.confirmPassword) {
+          toast({
+            title: "Password mismatch",
+            description: "Passwords do not match",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const { error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: {
+              full_name: formData.fullName,
+              phone: formData.phone,
+            }
+          }
+        });
+
+        if (error) {
+          toast({
+            title: "Error creating account",
+            description: error.message,
+            variant: "destructive",
+          });
+          return;
+        }
+
+        toast({
+          title: "Account created!",
+          description: "Please check your email to verify your account.",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Unexpected error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -199,9 +254,10 @@ const Login = () => {
 
             <Button
               type="submit"
+              disabled={loading}
               className="w-full bg-energy-accent hover:bg-energy-accent/90 text-white py-2 mt-6"
             >
-              {isLogin ? 'Sign In' : 'Create Account'}
+              {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Create Account')}
             </Button>
           </form>
 
